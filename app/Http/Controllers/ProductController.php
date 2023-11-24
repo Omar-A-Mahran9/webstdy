@@ -16,13 +16,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $AllProduct=Product::latest()->get();
+        $AllProducts=Product::latest()->get();
+        $AllProduct=array();
+
+        foreach( $AllProducts as $prd ){
+            $prd->variant ;
+             array_push($AllProduct, $prd);
+        };
         return $AllProduct;
     }
 
     public function showproduct($id)
     {
         $Product=Product::find($id);
+        $Product->variant;
         return $Product;
     }
     public function filter($id) {

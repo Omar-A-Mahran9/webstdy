@@ -84,6 +84,84 @@
             </aside>
         </div>
     </body>
+
+    <div
+        v-if="Product"
+        style="z-index: 99999"
+        class="modal fade"
+        id="showProductModal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form method="post">
+                    <div class="modal-header">
+                        <h4>show Product</h4>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-6">
+                            <img
+                                :src="imageUrl + '/' + Product.productImage"
+                                alt="User Avatar"
+                                class="img-size-60 img-square mr-3 rounded"
+                                width="100"
+                            />
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="mb-3 m-2">
+                                <div class="row align-items-center">
+                                    <div class="col-8">
+                                        <h4 class="fw-bold modal-title">
+                                            {{ Product.productname }}
+                                        </h4>
+                                        <p class="modal-description">
+                                            {{ Product.ProductDescription }}
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="col-4 d-flex gap-1 align-items-center"
+                                    >
+                                        <h4 id="totalPrice"></h4>
+                                        <h3 class="fw-bold">
+                                            {{ Product.ProductPrice }}
+                                            <strong>EGP</strong>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr />
+
+                            <div
+                                class="row align-items-center pb-3 m-2 options-container"
+                            ></div>
+                            <div v-for="variants in Product.variant">
+                                <div v-for="opt in AllOption">
+                                    <div v-if="opt.id == variants.Option_id">
+                                        <p>{{ opt.OptionName }}</p>
+                                        <div v-for="opt in opt.optionvalues">
+                                            <a
+                                                v-if="
+                                                    opt.id ==
+                                                    variants.option_values_id
+                                                "
+                                                class="btn btn-danger"
+                                            >
+                                                {{ opt.valueName }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer"></div>
+                </form>
+            </div>
+        </div>
+    </div>
 </template>
 <script setup>
 import { onMounted, ref } from "vue";
@@ -110,6 +188,7 @@ const applyfilter = (id) => {
 const showProduct = (id) => {
     axios.get(`/product/${id}`).then((response) => {
         Product.value = response.data;
+        $("#showProductModal").modal("show");
     });
 };
 const Alloption = () => {
